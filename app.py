@@ -25,7 +25,7 @@ def values(message: telebot.types.Message):
 def convert(message: telebot.types.Message):
 
     try:
-        values = message.text.split(' ')
+        values = message.text.split()
 
         if len(values) != 3:
             raise ConvertException('Количество введенных параметров не совпадает с требуемым - 3 параметра')
