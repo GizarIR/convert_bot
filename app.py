@@ -1,15 +1,8 @@
 import telebot
 from telebot import types
-import telegram
 from extensions import ConvertException, CryptoConvert
 from config import TOKEN, keys
 
-# простое создание кнопок
-# conv_markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
-# buttons = []
-# for val in keys.keys():
-#     buttons.append(types.KeyboardButton(val.capitalize()))
-# conv_markup.add(*buttons)
 
 # динамическое создание клавиатуры
 def create_markup(quote = None):
@@ -21,9 +14,10 @@ def create_markup(quote = None):
     markup.add(*buttons)
     return markup
 
-
+# создаем бота
 bot = telebot.TeleBot(TOKEN)
 
+# обработчик команд старт и хелп
 @bot.message_handler(commands=['start', 'help'])
 def help(message: telebot.types.Message):
     text = '<u>Бот имеет 2 режима работы:</u> \n' \
@@ -33,6 +27,7 @@ def help(message: telebot.types.Message):
            'Чтобы узнать доступные валюты введите команду:  /values'
     bot.send_message(message.chat.id, text, parse_mode='html')
 
+# обработчик команды списка валют
 @bot.message_handler(commands=['values'])
 def values(message: telebot.types.Message):
     text = "Доступные валюты:"
@@ -69,7 +64,7 @@ def amount_handler(message: telebot.types.Message, quote, base):
         text = f'{amount} {quote}  это  {total_base} {base}'
         bot.send_message(message.chat.id, text)
 
-
+# реализация Краткого режима <евро рубль 1>
 @bot.message_handler(content_types=['text', ])
 def convert(message: telebot.types.Message):
 
@@ -90,4 +85,5 @@ def convert(message: telebot.types.Message):
         text = f'{amount} {quote}  это  {total_base} {base}'
         bot.send_message(message.chat.id, text)
 
+# старт бота
 bot.polling()

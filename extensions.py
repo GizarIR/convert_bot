@@ -2,9 +2,11 @@ import requests
 import json
 from config import keys
 
+# обработчик ошибок
 class ConvertException(Exception):
     pass
 
+# основной класс конвертера
 class CryptoConvert():
     @staticmethod
     def get_price(quote: str, base: str, amount: str):
