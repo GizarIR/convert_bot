@@ -1,5 +1,6 @@
 import telebot
-from  telebot import types
+from telebot import types
+import telegram
 from extensions import ConvertException, CryptoConvert
 from config import TOKEN, keys
 
@@ -25,12 +26,12 @@ bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start', 'help'])
 def help(message: telebot.types.Message):
-    text = 'Бот имеет 2 режима работы. Первый - Краткий: Для начала работы бота введите команду в формате: ' \
-'<имя валюты> <имя валюты, в которую надо перевести> <количество первой валюты>. ' \
-'Второй - Диалог. Для старта данного режима наберите: /convert ' \
-'Чтобы узнать доступные валюты введите команду:  /values'
-    bot.reply_to(message, text)
-
+    text = '<u>Бот имеет 2 режима работы:</u> \n' \
+           '1. Краткий: Для начала работы бота введите команду в формате:\n' \
+           '&lt имя валюты &gt &lt имя валюты, в которую надо перевести &gt &lt количество первой валюты &gt"\n' \
+           '2. Диалог: Для старта данного режима наберите: /convert \n' \
+           'Чтобы узнать доступные валюты введите команду:  /values'
+    bot.send_message(message.chat.id, text, parse_mode='html')
 
 @bot.message_handler(commands=['values'])
 def values(message: telebot.types.Message):
@@ -49,7 +50,7 @@ def answer_quote(message: telebot.types.Message):
 def quote_handler(message: telebot.types.Message):
     quote = message.text.strip().lower()
     text = "Выберите валюту, в которую Вы хотите конвертировать"
-    bot.send_message(message.chat.id, text, reply_markup=create_markup('quote'))
+    bot.send_message(message.chat.id, text, reply_markup=create_markup(quote))
     bot.register_next_step_handler(message, base_handler, quote)
 
 def base_handler(message: telebot.types.Message, quote):
